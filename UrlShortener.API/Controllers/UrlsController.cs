@@ -66,5 +66,16 @@ namespace UrlShortener.API.Controllers
             await _urlService.DeleteAtIdAsync(id);
             return NoContent();
         }
+
+        [HttpGet("/r/{code}")]
+        public async Task<IActionResult> RedirectToOriginal(string code)
+        {
+            var url = await _urlService.GetByCodeAsync(code);
+            if (url == null)
+                return NotFound("URL not found");
+
+            return Redirect(url.OriginalUrl);
+        }
+
     }
 }
